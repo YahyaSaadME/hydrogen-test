@@ -45,14 +45,16 @@ print(f"Calibration complete. R0 (clean air Rs): {r0:.2f} Ω")
 # 📡 Continuous Monitoring
 try:
     while True:
-        adc_val = read_channel(0)
-        voltage = adc_to_voltage(adc_val)
-        rs = calculate_rs(voltage)
-        rs_r0 = rs / r0
-        ppm = estimate_h2_ppm(rs_r0)
+        try:
+            adc_val = read_channel(0)
+            voltage = adc_to_voltage(adc_val)
+            rs = calculate_rs(voltage)
+            rs_r0 = rs / r0
+            ppm = estimate_h2_ppm(rs_r0)
 
-        print(f"Voltage: {voltage:.2f} V | Rs: {rs:.2f} Ω | Rs/R0: {rs_r0:.2f} | Hydrogen: {ppm} ppm")
-        time.sleep(2)
-
+            print(f"Voltage: {voltage:.2f} V | Rs: {rs:.2f} Ω | Rs/R0: {rs_r0:.2f} | Hydrogen: {ppm} ppm")
+            time.sleep(.5)
+        except Exception as e:
+            print(f"Error: {e}")
 except KeyboardInterrupt:
     print("Stopped")
