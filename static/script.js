@@ -1,6 +1,6 @@
 class HydrogenMonitor {
     constructor() {
-        this.threshold = 100; // PPM threshold for alerts
+        this.threshold = 150; // PPM threshold for alerts
         this.updateInterval = 1000; // Update every second
         this.init();
     }
