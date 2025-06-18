@@ -1,0 +1,14 @@
+[Unit]
+Description=Hydrogen Application
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/Desktop/hydrogen
+ExecStart=/bin/bash /root/Desktop/hydrogen/start_hydrogen.sh
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
