@@ -199,24 +199,6 @@ class HydrogenMonitorApp:
             }
         ]
 
-        # Initialize web server data (for sharing with external web server)
-        self.web_sensor_data = [
-            {
-                "value": "--",
-                "resistance": "--",
-                "ratio": "--",
-                "timestamp": None,
-                "status": "disconnected"
-            },
-            {
-                "value": "--",
-                "resistance": "--",
-                "ratio": "--",
-                "timestamp": None,
-                "status": "disconnected"
-            }
-        ]
-        
         # Register cleanup function to run on window close
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
 
@@ -229,11 +211,6 @@ class HydrogenMonitorApp:
         self.buzzer_thread = threading.Thread(target=self.buzzer_control)
         self.buzzer_thread.daemon = True
         self.buzzer_thread.start()
-
-        # Start web data sharing thread
-        self.web_data_thread = threading.Thread(target=self.update_web_data)
-        self.web_data_thread.daemon = True
-        self.web_data_thread.start()
 
         # Schedule UI updates
         self.update_ui()
@@ -274,23 +251,6 @@ class HydrogenMonitorApp:
                     print("Alert cleared - buzzer off")
                 time.sleep(0.1)
 
-    def update_web_data(self):
-        """Update web server data continuously"""
-        try:
-            from webserver import sensor_data
-            
-            while True:
-                # Update the global sensor_data in webserver module
-                sensor_data[0] = self.web_sensor_data[0].copy()
-                sensor_data[1] = self.web_sensor_data[1].copy()
-                time.sleep(1)
-                
-        except ImportError:
-            # Web server module not available, skip web data updates
-            pass
-        except Exception as e:
-            print(f"Error updating web data: {e}")
-
     def update_ui(self):
         """Update UI with the latest sensor data"""
         # Process queued data
@@ -299,15 +259,6 @@ class HydrogenMonitorApp:
                 sensor_data = self.data_queue.get_nowait()
                 sensor_index = sensor_data["sensor_index"]
                 self.sensor_data[sensor_index] = sensor_data["data"]
-                
-                # Update web server data with proper status
-                self.web_sensor_data[sensor_index] = {
-                    "value": sensor_data["data"]["value"],
-                    "resistance": sensor_data["data"]["resistance"],
-                    "ratio": sensor_data["data"]["ratio"],
-                    "timestamp": sensor_data["data"]["timestamp"],
-                    "status": "connected" if sensor_data["data"]["timestamp"] and time.time() - sensor_data["data"]["timestamp"] < 10 else "disconnected"
-                }
             except queue.Empty:
                 break
 
@@ -372,14 +323,6 @@ class HydrogenMonitorApp:
             if data["resistance"] != "--" and data["ratio"] != "--":
                 self.resistance_labels[sensor_index].config(text=f"Resistance: {data['resistance']} Ω")
                 self.ratio_labels[sensor_index].config(text=f"Rs/R0: {data['ratio']}")
-
-        # Update web server data status for stale connections
-        for sensor_index in range(2):
-            if (self.web_sensor_data[sensor_index]["timestamp"] and 
-                time.time() - self.web_sensor_data[sensor_index]["timestamp"] > 10):
-                self.web_sensor_data[sensor_index]["status"] = "disconnected"
-            elif not self.connected:
-                self.web_sensor_data[sensor_index]["status"] = "disconnected"
 
         # Schedule next update - reduced frequency for better performance
         self.root.after(100, self.update_ui)
@@ -501,10 +444,12 @@ class HydrogenMonitorApp:
             print(f"Error processing data: {str(e)}, Line: {data_line}")
 
 if __name__ == "__main__":
-    print("Note: Use run_system.py to start both GUI and web server together")
-    print("Starting GUI only...")
-    
     # Create Tkinter window
     root = tk.Tk()
+
+    # On Windows, use COM port instead of /dev/serial0
+    # For example: app = HydrogenMonitorApp(root, serial_port='COM3')
     app = HydrogenMonitorApp(root)
+
+    # Start the Tkinter main loop
     root.mainloop()

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hydrogen Leak Detection System</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <i class="fas fa-atom header-icon"></i>
+                <h1>Hydrogen Leak Detection System</h1>
+                <div class="status-indicator" id="systemStatus">
+                    <i class="fas fa-circle"></i>
+                    <span>System Online</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="dashboard">
+            <div class="sensor-grid">
+                <div class="sensor-card" id="sensor1">
+                    <div class="sensor-header">
+                        <h2><i class="fas fa-gas-pump"></i> Hydrogen Sensor 1</h2>
+                        <div class="sensor-status" id="status1">
+                            <i class="fas fa-circle"></i>
+                        </div>
+                    </div>
+                    <div class="sensor-content">
+                        <!-- Gauge Display -->
+                        <div class="gauge-container">
+                            <canvas id="gauge1" width="300" height="200"></canvas>
+                            <div class="gauge-info">
+                                <span class="gauge-value" id="gaugeValue1">--</span>
+                                <span class="gauge-unit">PPM</span>
+                            </div>
+                        </div>
+                        
+                        <div class="sensor-details">
+                            <div class="detail-item">
+                                <span class="detail-label">Resistance:</span>
+                                <span class="detail-value" id="resistance1">-- Ω</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Rs/R0 Ratio:</span>
+                                <span class="detail-value" id="ratio1">--</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Last Update:</span>
+                                <span class="detail-value" id="timestamp1">--</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="alert-banner" id="alert1" style="display: none;">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>HYDROGEN LEAK DETECTED!</span>
+                    </div>
+                </div>
+
+                <div class="sensor-card" id="sensor2">
+                    <div class="sensor-header">
+                        <h2><i class="fas fa-gas-pump"></i> Hydrogen Sensor 2</h2>
+                        <div class="sensor-status" id="status2">
+                            <i class="fas fa-circle"></i>
+                        </div>
+                    </div>
+                    <div class="sensor-content">
+                        <!-- Gauge Display -->
+                        <div class="gauge-container">
+                            <canvas id="gauge2" width="300" height="200"></canvas>
+                            <div class="gauge-info">
+                                <span class="gauge-value" id="gaugeValue2">--</span>
+                                <span class="gauge-unit">PPM</span>
+                            </div>
+                        </div>
+                        
+                        <div class="sensor-details">
+                            <div class="detail-item">
+                                <span class="detail-label">Resistance:</span>
+                                <span class="detail-value" id="resistance2">-- Ω</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Rs/R0 Ratio:</span>
+                                <span class="detail-value" id="ratio2">--</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Last Update:</span>
+                                <span class="detail-value" id="timestamp2">--</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="alert-banner" id="alert2" style="display: none;">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>HYDROGEN LEAK DETECTED!</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>&copy; 2024 Hydrogen Leak Detection System - Real-time Monitoring</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='gauge.js') }}"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
