@@ -100,7 +100,7 @@ def start_gui_app():
                 self.root.focus_force()
                 self.root.grab_set()
                 
-                self.threshold = 100
+                self.threshold = 150
                 self.serial_port = serial_port
                 self.baud_rate = baud_rate
                 self.serial = None
@@ -334,7 +334,7 @@ def start_gui_app():
                         self.resistance_labels[sensor_index].config(text=f"Resistance: {data['resistance']} Ω")
                         self.ratio_labels[sensor_index].config(text=f"Rs/R0: {data['ratio']}")
                 
-                self.root.after(100, self.update_ui)
+                self.root.after(150, self.update_ui)
             
             def run_serial_connection(self):
                 # ...existing code...

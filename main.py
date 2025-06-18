@@ -21,7 +21,7 @@ class HydrogenMonitorApp:
         self.root.grab_set()
 
         # Set threshold for alert (in PPM) - 100 ppm
-        self.threshold = 100
+        self.threshold = 150
 
         # Serial connection parameters
         self.serial_port = serial_port
